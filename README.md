@@ -1,4 +1,16 @@
 ![Obsidian Atomizer Diagram](docs/obsidian-atomizer-diagram.png)
+
+<p align="center">
+  <img src="docs/assets/logo.png" alt="Obsidian Atomizer" width="120" />
+</p>
+Turn fragmented conversations into structured, traceable knowledge.
+
+<h1 align="center">Obsidian Atomizer</h1>
+Deterministic pipeline for converting fragmented conversations into structured, traceable knowledge.
+
+
+
+
 ## License & Usage
 
 This project is source-available for personal and non-commercial use only.
@@ -6,12 +18,6 @@ This project is source-available for personal and non-commercial use only.
 Commercial use requires an explicit license from the author.
 
 For inquiries, contact the repository owner.
-
-<p align="center">
-  <img src="docs/assets/logo.png" alt="Obsidian Atomizer" width="120" />
-</p>
-
-<h1 align="center">Obsidian Atomizer</h1>
 
 <p align="center">
   <strong>Turn any AI conversation, email thread, PDF, or document into linked atomic notes in your Obsidian vault — automatically.</strong>

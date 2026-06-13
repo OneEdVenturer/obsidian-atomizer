@@ -1,3 +1,4 @@
+![Obsidian Atomizer Diagram](docs/Obsidian-Atomizer-Infographic.png)
 ## License & Usage
 
 This project is source-available for personal and non-commercial use only.

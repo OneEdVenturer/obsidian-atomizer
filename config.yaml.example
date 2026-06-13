@@ -1,0 +1,177 @@
+# =============================================================================
+# Obsidian Atomizer — Configuration
+# =============================================================================
+# Copy this file to config.yaml and customize for your setup:
+#   cp config.yaml.example config.yaml
+#
+# Or run: atomizer --init (interactive setup)
+# =============================================================================
+
+
+# =============================================================================
+# LLM PROVIDER
+# =============================================================================
+# Which LLM to use for atomic note extraction.
+#
+# Options:
+#   anthropic — Claude Sonnet/Opus via Anthropic API (paid, highest quality)
+#   local     — Any OpenAI-compatible endpoint: Ollama, LM Studio, etc. (free)
+
+provider: local
+model: auto                     # "auto" queries your local server for available models
+                                # Or specify explicitly:
+                                #   Ollama:     qwen2.5:14b, llama3.1:8b, mistral:7b-instruct
+                                #   LM Studio:  see loaded model name in server tab
+                                #   Anthropic:  claude-sonnet-4-6, claude-opus-4-1
+
+# --- Anthropic (only needed if provider: anthropic) ---
+# Set your API key as an environment variable (never put it in this file):
+#   Linux/macOS:  export ANTHROPIC_API_KEY="sk-ant-..."
+#   Windows:      $env:ANTHROPIC_API_KEY = "sk-ant-..."
+
+# --- Local LLM endpoint ---
+local_endpoint: http://localhost:11434/v1    # Ollama default
+# local_endpoint: http://localhost:1234/v1   # LM Studio default
+
+
+# =============================================================================
+# OUTPUT — Where atomic notes are written
+# =============================================================================
+# This should be inside your Obsidian vault (or any folder you want).
+# Notes are organized into subdirectories by domain:
+#   {output_dir}/structural-engineering/note-title.md
+#   {output_dir}/software/note-title.md
+#   {output_dir}/general/note-title.md
+
+output_dir: ~/ObsidianVault/Atoms/
+
+# Windows users — use forward slashes or single-quoted backslashes:
+#   output_dir: C:/Users/yourname/ObsidianVault/Atoms/
+#   output_dir: 'C:\Users\yourname\ObsidianVault\Atoms\'
+
+
+# =============================================================================
+# ARCHIVE — Where processed input files are moved and renamed
+# =============================================================================
+# After successful extraction, the original input file is renamed using the
+# taxonomy system and moved here. Set archive_enabled: false to leave input
+# files in place.
+
+archive_enabled: true
+archive_root: ~/ObsidianVault/Archive/
+
+# Archive files are organized by year-month:
+#   {archive_root}/2026-06/2026-06-11_001_ENG-INT-AISESS_Design-Review.md
+#   {archive_root}/2026-06/2026-06-11_002_BIZ-ACM-EMAIL_Contract-Terms.txt
+
+
+# =============================================================================
+# ARCHIVE TAXONOMY — Customize these codes for your work
+# =============================================================================
+# The archive naming system uses short codes to classify files.
+# Add your own domains, clients, and content types below.
+#
+# Naming pattern (date-first for chronological sorting):
+#   {Date}_{Seq}_{Domain}-{Client}-{ContentType}_{Topic}.{ext}
+#
+# Example:
+#   2026-06-11_001_ENG-ACM-EMAIL_Structural-Analysis-Review.pdf
+
+archive_taxonomy:
+
+  # --- Domain codes (auto-detected from content) ---
+  # What area of work does this content belong to?
+  # Add or modify to match your field.
+  domains:
+    engineering: ENG
+    structural-engineering: ENG
+    software: SWD
+    legal: LAW
+    medical: MED
+    research: RES
+    finance: FIN
+    marketing: MKT
+    operations: OPS
+    business: BIZ
+    education: EDU
+    general: GEN
+
+  # --- Client codes (auto-detected from content) ---
+  # Who is this conversation with/about?
+  # Add your clients, partners, and internal teams here.
+  #
+  # The LLM detects client names from the conversation content and maps
+  # them using this table. Multiple aliases can point to the same code.
+  # Matching is case-insensitive with substring fallback.
+  clients:
+    # Examples — replace with your own:
+    # acme-corp: ACM
+    # acme: ACM
+    # john smith: ACM        # map a contact name to their company
+    # globex: GLX
+    # initech: ITC
+    internal: INT
+    personal: PER
+
+  # --- Content type codes (auto-mapped from input format) ---
+  # You typically don't need to change these.
+  content_types:
+    plaintext: EMAIL          # .txt files assumed to be email exchanges
+    markdown: AISESS          # .md files assumed to be AI chat sessions
+    claude-json: AISESS
+    chatgpt-json: AISESS
+    copilot: AISESS
+    pdf: REPORT               # .pdf files assumed to be reports/documents
+    docx: REPORT              # .docx files assumed to be reports/documents
+
+
+# =============================================================================
+# OPTIMIZATION — Reduce tokens before sending to LLM
+# =============================================================================
+# Two-stage pipeline that strips noise locally (free) before the paid/slow
+# LLM extraction call.
+#
+# Modes:
+#   rules — Regex/pattern cleanup only. Instant, always free. Best for simple inputs.
+#   llm   — Rules pass + local LLM intelligent filtering. Free if using Ollama/LM Studio.
+#   both  — Same as "llm" (rules always run first). This is the recommended mode.
+#
+# The optimization LLM always uses your local endpoint, never Anthropic.
+# This means optimization is always free, even when extraction uses Anthropic.
+
+optimization:
+  enabled: true
+  mode: both                              # rules | llm | both
+
+  # Local LLM for smart-clean (separate from extraction LLM)
+  llm_provider: local
+  llm_model: auto                         # or specify: qwen2.5:14b, mistral:7b-instruct
+  llm_endpoint: http://localhost:11434/v1 # Ollama default
+
+  # Tuning thresholds (defaults work well — adjust only if needed)
+  boilerplate_threshold: 3                # min repeat count to flag as boilerplate
+  boilerplate_similarity: 0.90            # match threshold for near-identical blocks
+  quoted_reply_similarity: 0.85           # match threshold for quoted reply detection
+  duplicate_turn_similarity: 0.90         # match threshold for duplicate AI turns
+  min_token_saving_to_report: 50          # don't report a pass if it saved < 50 tokens
+
+
+# =============================================================================
+# CROSS-SESSION LINKING — Connect new notes to existing vault
+# =============================================================================
+# After extraction, scans your vault for concept overlaps and injects
+# bidirectional [[wikilinks]] between new and existing notes.
+#
+# This is what transforms your vault from isolated sessions into a
+# true knowledge graph.
+#
+# Safety: .bak backups are created before modifying any existing file.
+# If YAML corruption is detected, the original is automatically restored.
+
+cross_session_linking:
+  enabled: true
+  title_similarity_threshold: 0.65        # SequenceMatcher ratio (0.0 - 1.0)
+  min_shared_tags: 3                      # minimum overlapping tags to link
+  max_cross_links_per_note: 5             # prevent link spam
+  backup_before_backlink: true            # create .bak before modifying existing notes
+  backup_extension: .bak

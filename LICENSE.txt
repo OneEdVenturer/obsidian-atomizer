@@ -1,0 +1,27 @@
+Obsidian Atomizer License
+
+Copyright (c) 2026 Edward K. Choi
+
+Permission is granted to any individual to use, copy, and modify this software for PERSONAL and NON-COMMERCIAL purposes only.
+
+Commercial use of this software, including but not limited to:
+- Selling the software or derivatives
+- Integrating into commercial products or services
+- Offering it as part of a paid service
+
+is strictly prohibited without explicit written permission from the author.
+
+You may:
+- Use the software for personal knowledge management
+- Modify the code for personal use
+- Share the code with attribution
+
+You may NOT:
+- Use this software or any derivative for commercial purposes
+- Repackage and sell this software
+- Offer this as a SaaS or hosted service
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+For commercial licensing inquiries:
+Contact: 1edchoi@gmail.com

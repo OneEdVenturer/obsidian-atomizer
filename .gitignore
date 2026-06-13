@@ -1,0 +1,51 @@
+# =============================================================================
+# Obsidian Atomizer — .gitignore
+# =============================================================================
+
+# --- Personal configuration (contains local paths, client names) ---
+config.yaml
+config.local.yaml
+!config.yaml.example
+
+# --- Manifest (contains processing history, file hashes) ---
+.atomizer-manifest.json
+
+# --- Backup files created by cross-session linker ---
+*.bak
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+ENV/
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- Test output ---
+test-output/
+test-fixtures/*.bak
+
+# --- Obsidian vault files (if repo is inside vault) ---
+.obsidian/
+.trash/
